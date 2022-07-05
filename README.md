@@ -1,4 +1,4 @@
-# myTerraform
+# Terraform
 terraform study.. 
 
 
@@ -9,3 +9,5 @@ terraform study..
 main.tf
 variable "variable_test" {}
 ~~~
+
+
