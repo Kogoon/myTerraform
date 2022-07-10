@@ -1,5 +1,6 @@
 #!/bin/bash
-yum install -y httpd
-systemctl enable --now httpd
-export PUBLIC_IP=$(curl -s http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
-echo IP Address: $PUBLIC_IP > /var/www/html/index.html
+curl -fsSL https://get.docker.com/ | sh
+yum install -y wget unzip net-tools telnet rdate
+rdate -s time.bora.net && clock -w
+curl https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
+systemctl start docker && systemctl enable docker
