@@ -12,9 +12,9 @@ output "droplet_ip_address" {
 #  }
 #}
 
-output "docker_worker_ip" {
-  value = {
-    for droplet in digitalocean_droplet.worker:
-    droplet.name => droplet.ipv4_address
-  }
-}
+#output "docker_worker_ip" {
+#  value = {
+#    for droplet in digitalocean_droplet.worker:
+#    droplet.name => droplet.ipv4_address
+#  }
+#}
