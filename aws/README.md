@@ -30,4 +30,8 @@ $ aws create cluster --name <cluster_name> --version <version> --region <region>
    * `--fargate` : Create a Fargate profile scheduling pods in the default and kube-system namespaces onto Fargate
 
 
+* Delete Cluster
 
+~~~
+$ eksctl delete cluster --region ap-northeast-2 --name=<cluster_name>
+~~~
