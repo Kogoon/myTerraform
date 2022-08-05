@@ -43,7 +43,7 @@ resource "aws_subnet" "my_public_subnet_c" {
 
 resource "aws_subnet" "my_private_subnet_a" {
   vpc_id = aws_vpc.my_vpc.id
-  cidr_block = "10.1.1.0/24"
+  cidr_block = "10.0.101.0/24"
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -53,7 +53,7 @@ resource "aws_subnet" "my_private_subnet_a" {
 
 resource "aws_subnet" "my_private_subnet_c" {
   vpc_id = aws_vpc.my_vpc.id
-  cidr_block = "10.1.2.0/24"
+  cidr_block = "10.0.102.0/24"
   availability_zone = data.aws_availability_zones.available.names[2]
 
   tags = {
