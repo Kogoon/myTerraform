@@ -1,7 +1,7 @@
 ### VPC Start ###
 
 resource "aws_vpc" "mebbly-vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "172.16.0.0/23"
   enable_dns_hostnames = true
   enable_dns_support = true
   instance_tenancy = "default"
@@ -24,7 +24,7 @@ resource "aws_internet_gateway" "mebbly-igw" {
 # Public Subnet
 resource "aws_subnet" "public_subnet_a" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.0.0/24"
+  cidr_block = "172.16.0.0/28"
   availability_zone = "ap-northeast-2a"
 
   tags = {
@@ -34,33 +34,54 @@ resource "aws_subnet" "public_subnet_a" {
 
 resource "aws_subnet" "public_subnet_c" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = "172.16.0.16/28"
   availability_zone = "ap-northeast-2c"
 
   tags = {
     Name = "mebbly-Public-c"
   }
 }
-
 # Private Subnet
 
-resource "aws_subnet" "private_subnet_a" {
+resource "aws_subnet" "private_web_subnet_a" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.10.0/24"
+  cidr_block = "172.16.0.64/26"
   availability_zone = "ap-northeast-2a"
 
   tags = {
-    Name = "mebbly-Private-a"
+    Name = "mebbly-Private-Web-a"
   }
 }
 
-resource "aws_subnet" "private_subnet_c" {
+resource "aws_subnet" "private_web_subnet_c" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.11.0/24"
+  cidr_block = "172.16.0.128/26"
   availability_zone = "ap-northeast-2c"
 
   tags = {
-    Name = "mebbly-Private-c"
+    Name = "mebbly-Private-Web-c"
+  }
+}
+
+# Private Subnet
+
+resource "aws_subnet" "private_app_subnet_a" {
+  vpc_id = aws_vpc.mebbly-vpc.id
+  cidr_block = "172.16.1.0/25"
+  availability_zone = "ap-northeast-2a"
+
+  tags = {
+    Name = "mebbly-Private-App-a"
+  }
+}
+
+resource "aws_subnet" "private_app_subnet_c" {
+  vpc_id = aws_vpc.mebbly-vpc.id
+  cidr_block = "172.16.1.128/25"
+  availability_zone = "ap-northeast-2c"
+
+  tags = {
+    Name = "mebbly-Private-App-c"
   }
 }
 
@@ -68,7 +89,7 @@ resource "aws_subnet" "private_subnet_c" {
 
 resource "aws_subnet" "redis_subnet_a" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.20.0/24"
+  cidr_block = "172.16.0.192/27"
   availability_zone = "ap-northeast-2a"
 
   tags = {
@@ -78,7 +99,7 @@ resource "aws_subnet" "redis_subnet_a" {
 
 resource "aws_subnet" "redis_subnet_c" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.21.0/24"
+  cidr_block = "172.16.0.224/27"
   availability_zone = "ap-northeast-2c"
 
   tags = {
@@ -88,7 +109,7 @@ resource "aws_subnet" "redis_subnet_c" {
 
 resource "aws_subnet" "db_subnet_a" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.30.0/24"
+  cidr_block = "172.16.0.32/28"
   availability_zone = "ap-northeast-2a"
 
   tags = {
@@ -98,7 +119,7 @@ resource "aws_subnet" "db_subnet_a" {
 
 resource "aws_subnet" "db_subnet_c" {
   vpc_id = aws_vpc.mebbly-vpc.id
-  cidr_block = "10.0.31.0/24"
+  cidr_block = "172.16.0.48/28"
   availability_zone = "ap-northeast-2c"
 
   tags = {
@@ -239,13 +260,23 @@ resource "aws_route_table_association" "mebbly_public_subnet_c_association" {
   route_table_id = aws_route_table.mebbly_public_rt_c.id
 }
 
-resource "aws_route_table_association" "mebbly_private_subnet_a_association" {
-  subnet_id = aws_subnet.private_subnet_a.id
+resource "aws_route_table_association" "mebbly_private_web_subnet_a_association" {
+  subnet_id = aws_subnet.private_web_subnet_a.id
   route_table_id = aws_route_table.mebbly_private_rt_a.id
 }
 
-resource "aws_route_table_association" "mebbly_private_subnet_c_association" {
-  subnet_id = aws_subnet.private_subnet_c.id 
+resource "aws_route_table_association" "mebbly_private_web_subnet_c_association" {
+  subnet_id = aws_subnet.private_web_subnet_c.id 
+  route_table_id = aws_route_table.mebbly_private_rt_c.id
+}
+
+resource "aws_route_table_association" "mebbly_private_app_subnet_a_association" {
+  subnet_id = aws_subnet.private_app_subnet_a.id
+  route_table_id = aws_route_table.mebbly_private_rt_a.id
+}
+
+resource "aws_route_table_association" "mebbly_private_app_subnet_c_association" {
+  subnet_id = aws_subnet.private_app_subnet_c.id 
   route_table_id = aws_route_table.mebbly_private_rt_c.id
 }
 
